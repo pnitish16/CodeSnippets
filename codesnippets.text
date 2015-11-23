@@ -1,0 +1,151 @@
+Static map for map image display with lat,long marker:
+
+function:
+
+public static  String getMapService(String lat,String lon)
+	{
+		return 	"http://maps.googleapis.com/maps/api/staticmap?center="+lat+","+lon+"&zoom=10&size=300x300&sensor=true";
+	}
+
+call:
+
+VigiGuardApplication.getImageLoader().displayImage(VigiGuardApplication.getMapService(intervention.getLatitude(), intervention.getLongitude()), viewHolder.ivMap);
+
+ImageLoader initialization:
+
+oncreate:
+ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+				this).threadPriority(Thread.NORM_PRIORITY - 2)
+				.denyCacheImageMultipleSizesInMemory()
+				.discCacheFileNameGenerator(new Md5FileNameGenerator())
+				.tasksProcessingOrder(QueueProcessingType.LIFO)
+				.memoryCacheExtraOptions(720, 1080).build();
+		// Initialize ImageLoader with configuration.
+		ImageLoader.getInstance().init(config);
+
+		// Initialize ImageLoader with configuration.
+		ImageLoader.getInstance().init(config);
+		initLoaderLibrary();
+
+
+	void initLoaderLibrary() {
+		imageLoader = ImageLoader.getInstance();
+		options = new DisplayImageOptions.Builder()
+		.showImageForEmptyUri(R.drawable.noimage)
+		// resource or drawable
+		.showImageOnFail(R.drawable.noimage)
+		// resource or drawable
+		.cacheInMemory(true)
+		// .resetViewBeforeLoading(true)
+		.cacheOnDisc(true)
+		.considerExifParams(true)
+		.resetViewBeforeLoading(false)
+		// .displayer(new FadeInBitmapDisplayer(20))
+		.build();
+	}
+
+	// image loading code
+	public static ImageLoader getImageLoader() {
+		return imageLoader;
+	}
+
+	public static DisplayImageOptions getDisplayOption() {
+		return options;
+	}
+
+	public static void displayImage(String url, ImageView imageView) {
+		imageLoader.displayImage(url, imageView, options);
+	}
+Sample Thread Using Handler:
+
+	handler.postDelayed(new Runnable() 
+		{
+
+			@Override
+			public void run() 
+			{
+				setData();
+			}
+		}, 2000);
+
+Filtering Listview:
+
+// Filter Class
+	public void filter(String charText)
+	{
+		charText = charText.toLowerCase(Locale.getDefault());
+		reportList.clear();
+		if (charText.length() == 0) 
+		{
+			reportList.addAll(tempArrayList);
+		} 
+		else 
+		{
+			for (ViGiReport report : tempArrayList)
+			{
+				if (report.getReportContent().toLowerCase(Locale.getDefault()).contains(charText))
+				{
+					reportList.add(report);
+				}
+			}
+		}
+		notifyDataSetChanged();
+	}
+
+in Activity:
+
+		// Capture Text in EditText
+		edtSearch.addTextChangedListener(new TextWatcher() 
+		{
+			@Override
+			public void afterTextChanged(Editable arg0)
+			{
+				// TODO Auto-generated method stub
+				String text = edtSearch.getText().toString().toLowerCase(Locale.getDefault());
+				reportAdapter.filter(text);
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) 
+			{
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) 
+			{
+				// TODO Auto-generated method stub
+			}
+		});
+
+	Custom Dialog:
+public static void showCustomDialog(CharSequence title, CharSequence msg,Context ctx,final DialogStateListener dialogStateListener) 
+	{
+		AlertDialog.Builder build=null;
+		if (android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.HONEYCOMB) 
+		{
+			build = new AlertDialog.Builder(ctx,android.R.style.Theme_Holo_Light_Dialog);
+		}
+		else
+		{
+			build = new AlertDialog.Builder(ctx);
+		}
+		
+		//= new AlertDialog.Builder(ctx,android.R.style.Theme_Holo_Light_Dialog);
+		build.setTitle(title)
+		.setMessage(msg)
+		.setCancelable(false)
+		.setPositiveButton("OK", new DialogInterface.OnClickListener() 
+				{
+					@Override
+					public void onClick(DialogInterface dialog, int which) 
+					{
+						dialog.dismiss();
+						if(dialogStateListener!=null)
+							dialogStateListener.onClick(AlertDialog.BUTTON_POSITIVE);
+					}
+				});
+		AlertDialog dialog=build.create();
+		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+		dialog.show();
+	}
