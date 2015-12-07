@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@android:color/white"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/ivHome"
+        android:layout_width="wrap_content"
+        android:contentDescription="@string/homeMenu"
+        android:src="@mipmap/ic_launcher"
+        android:layout_alignParentLeft="true"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/ivHome"
+        android:layout_toLeftOf="@+id/ivHomeMenu"
+        android:padding="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignBottom="@+id/ivHome"
+        android:id="@+id/etSearch" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/app_name"
+        android:layout_height="wrap_content" />
+
+<ImageView
+    android:id="@+id/ivHomeMenu"
+    android:layout_width="wrap_content"
+    android:contentDescription="@string/homeMenu"
+    android:src="@mipmap/ic_launcher"
+    android:layout_alignParentRight="true"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp"
+    android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/ivSearchIcon"
+        android:layout_width="wrap_content"
+        android:contentDescription="@string/homeMenu"
+        android:src="@android:drawable/ic_search_category_default"
+        android:layout_toLeftOf="@+id/ivHomeMenu"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:layout_height="wrap_content" />
+    <ImageView
+        android:id="@+id/ivSearch"
+        android:layout_width="wrap_content"
+        android:contentDescription="@string/homeMenu"
+        android:src="@mipmap/ic_launcher"
+        android:layout_toLeftOf="@+id/ivHomeMenu"
+        android:layout_marginRight="5dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
