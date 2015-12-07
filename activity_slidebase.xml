@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/tb_sliding"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/action_bar_height"
+                android:layout_marginLeft="-15dp"
+                android:elevation="5dp">
+
+                <include layout="@layout/custom_tb_slide"></include>
+
+            </android.support.v7.widget.Toolbar>
+
+            <FrameLayout
+                android:id="@+id/content_frame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:background="@android:color/white" />
+
+        </LinearLayout>
+
+        <!-- The navigation drawer -->
+        <ListView
+            android:id="@+id/left_drawer"
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:background="@android:color/white"
+            android:choiceMode="singleChoice" />
+    </android.support.v4.widget.DrawerLayout>
+
+</RelativeLayout>
