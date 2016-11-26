@@ -1,0 +1,163 @@
+Add the following to your app/build.gradle file:
+dependencies {
+
+    compile 'com.google.code.gson:gson:2.6.2'
+
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0' 
+
+
+}
+
+Creating the Retrofit instance
+To send out network requests to an API, we need to use the Retrofit builder class and specify the base URL for the service.
+// Trailing slash is needed
+
+public static final String BASE_URL = "http://api.myservice.com/";
+
+Retrofit retrofit = new Retrofit.Builder()
+
+    .baseUrl(BASE_URL)
+
+    .addConverterFactory(GsonConverterFactory.create())
+
+    .build();
+Note also that we need to specify a factory for deserializing the response using the Gson library. The order in which the converters are added will be the sequence in which they are attempted to be processed as discussed in this video talk. If we wish to pass in a custom Gson parser instance, it can be specified too:
+Gson gson = new GsonBuilder()
+
+        .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+
+        .create();
+
+
+
+Retrofit retrofit = new Retrofit.Builder()
+
+    .baseUrl(BASE_URL)
+
+    .addConverterFactory(GsonConverterFactory.create(gson))
+
+    .build();
+Define the Endpoints
+With Retrofit 2, endpoints are defined inside of an interface using special retrofit annotations to encode details about the parameters and request method. In addition, the return value is always a parameterized Call<T> object such as Call<User>. If you do not need any type-specific response, you can specify return value as simply Call<ResponseBody>.
+For instance, the interface defines each endpoint in the following way:
+public interface MyApiEndpointInterface {
+
+    // Request method and URL specified in the annotation
+
+    // Callback for the parsed response is the last parameter
+
+
+
+    @GET("users/{username}")
+
+    Call<User> getUser(@Path("username") String username);
+
+
+
+    @GET("group/{id}/users")
+
+    Call<List<User>> groupList(@Path("id") int groupId, @Query("sort") String sort);
+
+
+
+    @POST("users/new")
+
+    Call<User> createUser(@Body User user);
+
+}
+Changing the base URL
+Normally, the base URL is defined when you instantiated an Retrofit instance. Retrofit 2 allows you to override the base URL specified by changing it in the annotation (i.e. if you need to keep one specific endpoint using an older API endpoint)
+@POST("https://api.github.com/api/v3")
+Adding headers
+Notice that there is a @Headers and @Header annotation. The Headers can be used to provide pre-defined ones:
+@Headers({"Cache-Control: max-age=640000", "User-Agent: My-App-Name"})
+
+@GET("/some/endpoint")
+We can also add headers as a parameter to the endpoint:
+@Multipart
+
+@POST("/some/endpoint")
+
+Call<SomeResponse> someEndpoint(@Header("Cache-Control") int maxAge)
+Form data
+If we wish to submit form-encoded data, we can use the FormUrlEncoded annotation. The @Field annotation will denote what payload will be submitted as form data.
+@FormUrlEncoded
+
+@POST("/some/endpoint")
+
+Observable<SomeResponse> someEndpoint(@Field("code") String code);
+Multipart forms
+If we need to upload images or files, we need to send by using Multipart forms. We will to mark the endpoint with @Multipart, and label at least one parameter with @Part.
+@Multipart
+
+@POST("some/endpoint")
+
+Call<Response> uploadImage(@Part("description") String description, @Part("image") RequestBody image)
+Assuming we have a reference to the file, we can create a RequestBody object: 
+MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+
+file = new File("/storage/emulated/0/Pictures/MyApp/test.png");
+
+RequestBody requestBody = RequestBody.create(MEDIA_TYPE_PNG, file);
+
+
+
+Call<Response> call = apiService.uploadImage("test", requestBody);
+If you need to specify a unique filename for your multipart upload, there is currently an issue in Retrofit 2 tracked in this ticket. Alternatively, you can create a multi-part RequestBody according to this OkHttp recipe guide and pass it along as one of the @Part annotated parameters:
+RequestBody requestBody = new MultipartBuilder()
+
+                .type(MultipartBuilder.FORM)
+
+                .addPart(
+
+                        Headers.of("Content-Disposition", "form-data; name=\"mycustomfile.png\""),
+
+                        RequestBody.create(MEDIA_TYPE_PNG, file))
+Accessing the API
+We can bring this all together by constructing a service leveraging the MyApiEndpointInterface interface with the defined endpoints:
+MyApiEndpointInterface apiService =
+
+    retrofit.create(MyApiEndpointInterface.class);
+If we want to consume the API asynchronously, we call the service as follows:
+String username = "sarahjean";
+
+Call<User> call = apiService.getUser(username);
+
+call.enqueue(new Callback<User>() {
+
+    @Override
+
+    public void onResponse(Call<User> call, Response<User> response) {
+
+        int statusCode = response.code();
+
+        User user = response.body();  
+
+    }
+
+
+
+    @Override
+
+    public void onFailure(Call<User> call, Throwable t) {
+
+        // Log error here since request failed
+
+    }
+
+});
+Shown above, Retrofit will download and parse the API data on a background thread, and then deliver the results back to the UI thread via the onResponse or onFailure method.
+Note also that OkHttp, which dispatches the callback on the worker thread, callbacks in Retrofit are dispatched on the main thread. Because UI updates can only be done on the main thread, the approach used by Retrofit can make it easier to make changes to your views.
+If you are using Retrofit in a Background Service instead of an Activity or Fragment, you can run the network call synchronously within the same thread by using the execute() method.
+try {
+
+  Response<User> response = call.execute();
+
+} catch (IOException e ){
+
+   // handle error
+
+}
+
