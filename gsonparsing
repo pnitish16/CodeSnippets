@@ -1,0 +1,30 @@
+Response: 
+{
+  "order_list": [
+    {
+      "order_id": "1",
+      "order_show_id": "0001",
+      "order_date": "2016-09-08",
+      "ord_total": "Rs 900.00",
+      "status": "Pending",
+      "pay_cap": "Pay"
+    }
+  ]
+}
+
+TYPE1:            
+                        JSONObject json = new JSONObject(s);
+                        
+                          Type collectionType = new TypeToken<List<MyOrder>>() {
+                        }.getType();
+                        myOrderList = gson.fromJson(json.optJSONArray("order_list").toString(), collectionType);
+TYPE2:      
+      
+      /* Type collectionType = new TypeToken<Collection<MyOrder>>() {
+                        }.getType();
+
+                        Collection<MyOrder> enums = gson.fromJson(json.optJSONArray("order_list").toString(), collectionType);
+                        MyOrder[] myOrders = enums.toArray(new MyOrder[enums.size()]);
+                        myOrderList = new ArrayList<MyOrder>(Arrays.asList(myOrders));*/
+
+                        
