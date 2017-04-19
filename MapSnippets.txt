@@ -1,0 +1,30 @@
+Getting location from lat long:
+http://maps.googleapis.com/maps/api/geocode/json?latlng=19.996201,73.747015&sensor=true
+
+Geocoding Api:
+public void getAddressDetails(Location location) {
+
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+            String city = addresses.get(0).getLocality();
+            String state = addresses.get(0).getAdminArea();
+            String country = addresses.get(0).getCountryName();
+            String postalCode = addresses.get(0).getPostalCode();
+            String knownName = addresses.get(0).getFeatureName();//
+
+            AddressDeatail addressDeatail = new AddressDeatail(address, city, state, country, postalCode, knownName);
+            Log.d("Display Address", addressDeatail.toString());
+
+            // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+   Getting center location on the screen:
+   LatLng center = mGoogleMap.getCameraPosition().target;
