@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:paddingBottom="5dp"
+            android:background="#95FFFFFF"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/tvDialogTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@null"
+                android:gravity="center_vertical|center_horizontal"
+                android:padding="10dp"
+                android:text="select"
+                android:background="@color/colorPrimary"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/titledivider"
+                android:layout_width="match_parent"
+                android:layout_height="0.2dp"
+                android:layout_below="@+id/tvDialogTitle" />
+
+            <TextView
+                android:id="@+id/tvCameraCpture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvDialogTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="5dp"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="capture"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="0.2dp"
+                android:layout_below="@+id/tvCameraCpture"
+                android:background="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/tvGallereySelect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvCameraCpture"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="5dp"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="gallery"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/imgCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="right|top"
+            android:background="@android:drawable/ic_menu_close_clear_cancel"
+            android:contentDescription="@null" />
+
+    </FrameLayout>
+
+</RelativeLayout>
