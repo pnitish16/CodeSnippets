@@ -1,0 +1,15 @@
+mAlertDialog.show();
+        Window window = mAlertDialog.getWindow();
+        if (window != null) {
+            window.setBackgroundDrawableResource(R.color.transparent_00_ff);
+            window.setContentView(R.layout.received_money_alert);
+            WindowManager m = mActivity.getWindowManager();
+            Display d = m.getDefaultDisplay(); 
+            WindowManager.LayoutParams p = window.getAttributes(); 
+            p.width = (int) (d.getWidth() * 0.95); 
+            p.gravity = Gravity.CENTER;
+            window.setAttributes(p);
+            mTvContinue = (TextView) window.findViewById(R.id.tv_dialog_continue);
+            txt_message = (TextView) window.findViewById(R.id.tv_dialog_received);
+            mCancel = (ImageView) window.findViewById(R.id.iv_close);
+         }
