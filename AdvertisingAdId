@@ -1,0 +1,41 @@
+class AdvertTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            String aaid = getAdId(MainActivity.this);
+            Log.d("advertising id", aaid);
+            return null;
+        }
+    }
+
+    /**
+     * Retrieve the Android Advertising Id
+     * <p>
+     * The device must be KitKat (4.4)+
+     * This method must be invoked from a background thread.
+     */
+    public static synchronized String getAdId(Context context) {
+
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT) {
+            return null;
+        }
+
+        AdvertisingIdClient.Info idInfo = null;
+        try {
+            idInfo = AdvertisingIdClient.getAdvertisingIdInfo(context);
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String advertId = null;
+        try {
+            advertId = idInfo.getId();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        return advertId;
+    }
